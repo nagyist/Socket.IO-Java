@@ -18,9 +18,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- since 8.0.2.v20111006 xhr start to fail with -->
         <!-- stable: <jetty.version>8.0.4.v20111024</jetty.version> -->
-        <!-- Seems fixed in 8.0.5: -->
+        <!-- Fixed with > 8.0.4: -->
         <!-- https://bugs.eclipse.org/bugs/show_bug.cgi?id=362468 -->
-        <jetty.version>8.0.1.v20110908</jetty.version>
+        <jetty.version>8.1.0.RC1</jetty.version>
     </properties>
 
     <developers>

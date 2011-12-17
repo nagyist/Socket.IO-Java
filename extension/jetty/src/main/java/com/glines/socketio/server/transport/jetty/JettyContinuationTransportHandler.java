@@ -24,22 +24,6 @@
  */
 package com.glines.socketio.server.transport.jetty;
 
-import com.glines.socketio.annotation.Handle;
-import com.glines.socketio.common.ConnectionState;
-import com.glines.socketio.common.DisconnectReason;
-import com.glines.socketio.common.SocketIOException;
-import com.glines.socketio.server.*;
-import com.glines.socketio.server.transport.AbstractHttpTransport;
-import com.glines.socketio.server.transport.DataHandler;
-import com.glines.socketio.util.IO;
-import com.glines.socketio.util.URI;
-import org.eclipse.jetty.continuation.Continuation;
-import org.eclipse.jetty.continuation.ContinuationListener;
-import org.eclipse.jetty.continuation.ContinuationSupport;
-import org.eclipse.jetty.server.HttpConnection;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -47,6 +31,29 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.continuation.Continuation;
+import org.eclipse.jetty.continuation.ContinuationListener;
+import org.eclipse.jetty.continuation.ContinuationSupport;
+import org.eclipse.jetty.server.AbstractHttpConnection;
+
+import com.glines.socketio.annotation.Handle;
+import com.glines.socketio.common.ConnectionState;
+import com.glines.socketio.common.DisconnectReason;
+import com.glines.socketio.common.SocketIOException;
+import com.glines.socketio.server.AbstractTransportHandler;
+import com.glines.socketio.server.ConnectableTransportHandler;
+import com.glines.socketio.server.SocketIOClosedException;
+import com.glines.socketio.server.SocketIOFrame;
+import com.glines.socketio.server.SocketIOSession;
+import com.glines.socketio.server.TransportType;
+import com.glines.socketio.server.transport.AbstractHttpTransport;
+import com.glines.socketio.server.transport.DataHandler;
+import com.glines.socketio.util.IO;
+import com.glines.socketio.util.URI;
 
 /**
  * @author Mathieu Carbou
@@ -393,7 +400,7 @@ public final class JettyContinuationTransportHandler extends AbstractTransportHa
      * This must be called within the context of an active HTTP request.
      */
     private static ConnectionTimeoutPreventer newTimeoutPreventor() {
-        HttpConnection httpConnection = HttpConnection.getCurrentConnection();
+        AbstractHttpConnection httpConnection = AbstractHttpConnection.getCurrentConnection();
         if (httpConnection == null) {
             LOGGER.log(Level.FINE, "No HttpConnection boundto local thread: " + Thread.currentThread().getName());
             return new ConnectionTimeoutPreventer() {
