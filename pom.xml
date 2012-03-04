@@ -20,7 +20,7 @@
         <!-- stable: <jetty.version>8.0.4.v20111024</jetty.version> -->
         <!-- Fixed with > 8.0.4: -->
         <!-- https://bugs.eclipse.org/bugs/show_bug.cgi?id=362468 -->
-        <jetty.version>8.1.0.RC1</jetty.version>
+        <jetty.version>8.1.1.v20120215</jetty.version>
     </properties>
 
     <developers>

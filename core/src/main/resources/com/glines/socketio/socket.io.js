@@ -182,6 +182,8 @@ if (typeof window != 'undefined'){
 	
 	Transport = io.Transport = function(base, options){
 		this.base = base;
+		this.base.options.secure = (window.location.protocol == "https:") ? true : false;
+		this.base.options.port = window.location.port;
 		this.options = {
 			timeout: 15000 // based on heartbeat interval default
 		};
