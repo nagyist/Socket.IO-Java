@@ -63,7 +63,7 @@ public class ChatSocketServlet extends SocketIOServlet {
             connections.offer(this);
             try {
                 outbound.sendMessage(SocketIOFrame.JSON_MESSAGE_TYPE, new Gson().toJson(
-                        Collections.singletonMap("welcome", "Welcome to Socket.IO Chat!")));
+                        Collections.singletonMap("welcome", "Welcome to Socket.IO Chat! ←→ ←→")));
             } catch (SocketIOException e) {
                 outbound.disconnect();
             }
