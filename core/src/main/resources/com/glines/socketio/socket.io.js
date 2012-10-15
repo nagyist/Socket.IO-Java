@@ -977,7 +977,7 @@ JSONPPolling.xdomainCheck = function(){
 			document: document,
 			port: document.location.port || 80,
 			resource: 'socket.io',
-			transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
+			transports: ['flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
 			transportOptions: {
 				'xhr-polling': {
 					timeout: 25000 // based on polling duration default
