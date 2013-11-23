@@ -29,7 +29,9 @@ import com.glines.socketio.client.common.SocketIOConnectionListener;
 import com.glines.socketio.common.ConnectionState;
 import com.glines.socketio.common.DisconnectReason;
 import com.glines.socketio.common.SocketIOException;
+import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.ScriptInjector;
 
 public class GWTSocketIOConnectionImpl implements SocketIOConnection {
 	private static final class SocketIOImpl extends JavaScriptObject {
@@ -81,13 +83,22 @@ public class GWTSocketIOConnectionImpl implements SocketIOConnection {
 	@Override
 	public void connect() {
 		if (socket == null) {
-			socket = SocketIOImpl.create(this, host, port);
+			ScriptInjector.fromUrl("/socket.io/socket.io.js").setCallback(
+				new Callback<Void, Exception>() {
+					public void onFailure(Exception reason) {
+						throw new IllegalStateException("Socket.io script load failed!");
+					}
+					public void onSuccess(Void result) {
+						socket = SocketIOImpl.create(GWTSocketIOConnectionImpl.this, host, port);
+						socket.connect();
+					}
+				}).setWindow(ScriptInjector.TOP_WINDOW).inject();
+		} else {
+			if (ConnectionState.CLOSED != getConnectionState()) {
+				throw new IllegalStateException("Connection isn't closed!");
+			}
+			socket.connect();
 		}
-
-		if (ConnectionState.CLOSED != getConnectionState()) {
-			throw new IllegalStateException("Connection isn't closed!");
-		}
-		socket.connect();
 	}
 
 	@Override
